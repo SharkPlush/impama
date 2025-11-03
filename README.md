@@ -14,10 +14,10 @@ impama will install packages into /home/$USER/.local/ OR /usr/local/
 
 impama will have a very small amount of curated packages because it's meant to install only certain types of packages like printer drivers.
 
-Dependings on the package they will be modified from the original upstream package to make it work on immutable Linux.
+Depending on the package they will be modified from the original upstream package to make it work on immutable Linux.
 
 The package manager is meant strictly for immutable Linux distributions that aren't meant to be modified and don't have their own way of dealing with package installs. i.e. Fedora Silverblue and it's variants, MicroOS, Aeon, Kalpa, stillOS, ect.
 
-For impala to work /home/$USER/local needs to be writtable and ideally /usr/local/ also needs to be writtable.
+For impama to work /home/$USER/local needs to be writtable and ideally /usr/local/ also needs to be writtable.
 
-So distributions like NixOS and VanillaOS which already have their own solutions to this issue don't need impala.
+So distributions like NixOS and VanillaOS which already have their own solutions to this issue don't need impama.
