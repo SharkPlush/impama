@@ -1,0 +1,41 @@
+#!/bin/bash
+
+# NOT MEANT TO BE USED CURRENTLY!!
+# NEEDS UPDATE SYSTEM
+# NEEDS DELETE SYSTEM
+# NEEDS UPDATE SYSTEM FOR IMPAMA ITSELF
+# NEEDS A CACHING SYSTEM SO IT KNOWS WHATS INSTALLED
+# NEEDS A SYSTEM TO INSTALL PACKAGES ONE BY ONE TO PREVENT RACE CONDITIONS
+# NEEDS A BETTER SYSTEM TO HANDLE MULTI PACKAGE INSTALLS
+
+cmd="$1"
+pkg="$2"
+shift
+  if [[ "$cmd" == "install" ]]; then
+  pull_package
+  else
+  echo "unknown command exiting.."
+  exit 1
+fi
+  
+if [[ $# -lt 1 ]]; then
+  echo "no packages given"
+  exit 1
+fi
+
+
+pull_package () {
+    for pkg in "$@" ; do
+    echo "installing $pkg"
+    tmpdir="/home/$USER/.cache/impama_tmp_install_dir/$pkg"
+    mkdir -p "$tmpdir"
+    SCRIPT_URL="https://raw.githubusercontent.com/SharkPlush/impama/main/install_scripts/$pkg/install.sh"
+    SCRIPT_PATH="$tmpdir/install.sh"
+    echo "downloading $SCRIPT_URL"
+    curl -fsSL "$SCRIPT_URL" -o "$SCRIPT_URL"
+    chmod +x "$SCRIPT_PATH"
+    echo "running installer for $pkg"
+    sudo bash "$SCRIPT_PATH"
+    echo "installed $pkg"
+done
+}
