@@ -271,5 +271,4 @@ EOF
   sudo rm -r /home/$USER/.cache/impama_temp_home_directory/
   fi
   }
-  
 detect_containerizer

@@ -15,11 +15,12 @@ install_package () {
   SCRIPT_URL="https://raw.githubusercontent.com/SharkPlush/impama/main/install_scripts/$package-install.sh"
   tmpdir="/var/tmp/impama_tmp_install_dir/"
   mkdir -p "$tmpdir"
+  SCRIPT_PATH="$tmpdir$package-install.sh"
   echo "downloading $SCRIPT_URL"
-  curl -fsSL "$SCRIPT_URL" -o "$tmpdir"
+  curl -fsSL "$SCRIPT_URL" -o "$SCRIPT_PATH"
   chmod +x "$SCRIPT_PATH"
   echo "running installer for $package"
-  sudo bash "$SCRIPT_PATH"
+  bash "$SCRIPT_PATH"
   echo "installed $package"
 }
 
