@@ -6,22 +6,22 @@
 # NEEDS UPDATE SYSTEM FOR IMPAMA ITSELF
 # NEEDS A CACHING SYSTEM SO IT KNOWS WHATS INSTALLED
 # NEEDS A SYSTEM TO INSTALL PACKAGES ONE BY ONE TO PREVENT RACE CONDITIONS
-# NEEDS A BETTER SYSTEM TO HANDLE MULTI PACKAGE INSTALLS
-
-#!/bin/bash
-# Impama CLI - minimal command parser
-
+# NEEDS A BETTER SYSTEM TO HANDLE MULTI PACKAGE INSTALL
 install_package () {
   SCRIPT_URL="https://raw.githubusercontent.com/SharkPlush/impama/main/install_scripts/$package-install.sh"
-  tmpdir="/var/tmp/impama_tmp_install_dir/"
-  mkdir -p "$tmpdir"
-  SCRIPT_PATH="$tmpdir$package-install.sh"
+  mkdir -p /var/tmp/impama_tmp_install_dir/
   echo "downloading $SCRIPT_URL"
-  curl -fsSL "$SCRIPT_URL" -o "$SCRIPT_PATH"
+  curl -fsSL "$SCRIPT_URL" -o /var/tmp/impama_tmp_install_dir/
+  if ! $SCRIPT_URL; then
+  echo "Install script doesn't exist exiting"
+  exit 1
+  fi
+  SCRIPT_PATH="/var/tmp/impama_tmp_install_dir/$package-install.sh"
   chmod +x "$SCRIPT_PATH"
   echo "running installer for $package"
   bash "$SCRIPT_PATH"
   echo "installed $package"
+  rm -r /var/tmp/impama_tmp_install_dir/
 }
 
 cmd="$1"

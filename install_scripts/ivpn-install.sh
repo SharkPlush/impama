@@ -23,7 +23,7 @@ detect_containerizer () {
   echo "Distrobox and / or Toolbx not installed exiting.."
   exit 1
   fi
-}
+  }
 # THIS FUNCTION COMPILES THE APPLICATION
 compile_app () {
 
