@@ -8,38 +8,78 @@
 # NEEDS A SYSTEM TO INSTALL PACKAGES ONE BY ONE TO PREVENT RACE CONDITIONS
 # NEEDS A BETTER SYSTEM TO HANDLE MULTI PACKAGE INSTALL
 install_package () {
-  SCRIPT_URL="https://raw.githubusercontent.com/SharkPlush/impama/main/install_scripts/$package-install.sh"
+  if [ $# -eq 1 ]; then
+    echo "No package was provided"
+    exit 0
+  fi
+for PACKAGE in "${@:2}"; do
+  SCRIPT_URL="https://raw.githubusercontent.com/SharkPlush/impama/main/install_scripts/$PACKAGE-install.sh"
   mkdir -p /var/tmp/impama_tmp_install_dir/
   echo "downloading $SCRIPT_URL"
-  curl -fsSL "$SCRIPT_URL" -o /var/tmp/impama_tmp_install_dir/
-  if ! $SCRIPT_URL; then
-  echo "Install script doesn't exist exiting"
-  exit 1
-  fi
-  SCRIPT_PATH="/var/tmp/impama_tmp_install_dir/$package-install.sh"
-  chmod +x "$SCRIPT_PATH"
-  echo "running installer for $package"
-  bash "$SCRIPT_PATH"
-  echo "installed $package"
-  rm -r /var/tmp/impama_tmp_install_dir/
-}
-
-cmd="$1"
-shift || true
-
-if [[ "$cmd" == "install" ]]; then
-  package="$1"
-fi  
-  if [[ -z "$package" ]]; then
-    echo "Error: No package specified."
-    exit 1
-  else
-    echo "Installing package: $package"
-    install_package
+  
+  if ! curl -fsSL "$SCRIPT_URL" -o /var/tmp/impama_tmp_install_dir/$PACKAGE-install.sh; then 
+    echo "Couldn't find URL exiting"
+    exit 0
   fi
   
-if [[ "$cmd" == "help" ]]; then
-  echo "impama usage:"
-  echo "  impama install <package>  install a package."
-  echo "  impama help               shows this help message."
+  SCRIPT_PATH="/var/tmp/impama_tmp_install_dir/$PACKAGE-install.sh"
+  chmod +x "$SCRIPT_PATH"
+  
+  echo "running installer for $PACKAGE"
+  bash "$SCRIPT_PATH"
+  echo "installed $package"
+  
+  rm -r /var/tmp/impama_tmp_install_dir/
+done
+}
+
+delete_package () {
+  if [ $# -eq 1 ]; then
+    echo "No package was provided"
+    exit 0
+  fi
+for PACKAGE in "${@:2}"; do
+  echo "$PACKAGE"
+done
+}
+
+update_package () {
+  if [ $# -eq 1 ]; then
+    echo "No package was provided"
+    exit 0
+  fi
+for PACKAGE in "${@:2}"; do
+  echo "$PACKAGE"
+done
+}
+
+
+#update_all () {
+
+#}
+
+help_list () {
+  echo "Usage:"
+  echo "  impama install <package>  Installs a package."
+  echo "  impama delete <package>   Deletes a package."
+  echo "  impama update <package>   Updates a package."
+  echo "  impama update-all         Updates all packages."
+  echo "  impama help               Shows help screen."
+  exit 0
+}
+
+# MAIN #
+
+if [ -z "$1" ]; then
+    help_list
 fi
+
+case "$1" in
+  help) help_list ;;
+  install) install_package "$@" ;; 
+  delete) delete_package "$@" ;; 
+  update) update_package "$@" ;; 
+  update-all) update_all ;;
+  *) echo "Unknown Command: "$1""
+     help_list ;;
+esac
