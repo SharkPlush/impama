@@ -11,6 +11,18 @@
 #!/bin/bash
 # Impama CLI - minimal command parser
 
+install_package () {
+  SCRIPT_URL="https://raw.githubusercontent.com/SharkPlush/impama/main/install_scripts/$package/install.sh"
+  tmpdir="/var/tmp/impama_tmp_install_dir/"
+  mkdir -p "$tmpdir"
+  echo "downloading $SCRIPT_URL"
+  curl -fsSL "$SCRIPT_URL" -o "$tmpdir"
+  chmod +x "$SCRIPT_PATH"
+  echo "running installer for $pkg"
+  sudo bash "$SCRIPT_PATH"
+  echo "installed $pkg"
+}
+
 cmd="$1"
 shift || true
 
@@ -30,15 +42,3 @@ if [[ "$cmd" == "help" ]]; then
   echo "  impama install <package>  install a package."
   echo "  impama help               shows this help message."
 fi
-
-install_package () {
-  SCRIPT_URL="https://raw.githubusercontent.com/SharkPlush/impama/main/install_scripts/$package/install.sh"
-  tmpdir="/var/tmp/impama_tmp_install_dir/"
-  mkdir -p "$tmpdir"
-  echo "downloading $SCRIPT_URL"
-  curl -fsSL "$SCRIPT_URL" -o "$tmpdir"
-  chmod +x "$SCRIPT_PATH"
-  echo "running installer for $pkg"
-  sudo bash "$SCRIPT_PATH"
-  echo "installed $pkg"
-}
